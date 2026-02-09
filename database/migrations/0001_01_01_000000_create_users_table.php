@@ -10,32 +10,25 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
-        });
+{
+    Schema::create('users', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->string('email')->unique();
+        $table->timestamp('email_verified_at')->nullable();
+        $table->string('password');
 
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
+        // --- NOS AJOUTS POUR L'HÔPITAL ---
+        // On lie l'utilisateur à un hôpital (nullable pour les admins globaux)
+        $table->foreignId('hopital_id')->nullable()->constrained('hopitaux')->onDelete('cascade');
 
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
-        });
-    }
+        // On définit le rôle de l'utilisateur
+        $table->enum('role', ['admin_global', 'admin_hopital', 'medecin', 'receptionniste'])->default('medecin');
+
+        $table->rememberToken();
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
