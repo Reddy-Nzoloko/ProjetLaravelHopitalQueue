@@ -21,5 +21,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // creation des hopitaux
+        \App\Models\Hopital::create([
+        'nom' => 'Hôpital Général de Référence',
+        'code_unique' => 'HGR-01',
+        'adresse' => 'Avenue de la Paix'
+    ]);
     }
 }
