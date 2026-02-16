@@ -11,10 +11,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// --- Auth (basic) ---
+// Preview route (demo dashboard without auth) — local only
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
+Route::get('/demo-dashboard', [DashboardController::class, 'index']);
+
+// --- Auth (basic) ---
 Route::get('login', [LoginController::class, 'create'])->name('login');
 Route::post('login', [LoginController::class, 'store']);
 Route::post('logout', [LoginController::class, 'destroy'])->name('logout');

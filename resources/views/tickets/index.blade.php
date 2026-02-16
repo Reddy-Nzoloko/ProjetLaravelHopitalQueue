@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="flex items-center justify-between mb-4">
-    <h2 class="text-xl font-semibold">Tickets</h2>
+    <h2 class="text-xl font-semibold flex items-center gap-3"><i data-lucide="ticket" class="w-5 h-5 text-indigo-600"></i>Tickets</h2>
+    <div class="text-sm text-gray-500">UI futuriste — thème Teal + Indigo</div>
 </div>
 
 <div class="grid md:grid-cols-3 gap-6">
@@ -22,7 +23,7 @@
                 <option value="1">Urgent</option>
             </select>
 
-            <button class="w-full bg-indigo-600 text-white px-4 py-2 rounded">Générer un ticket</button>
+            <button class="w-full bg-gradient-to-r from-teal-500 to-indigo-600 text-white px-4 py-2 rounded shadow-md flex items-center justify-center gap-2"><i data-lucide="plus-circle" class="w-4 h-4"></i>Générer un ticket</button>
         </form>
     </div>
 

@@ -6,6 +6,46 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+        --font-sans: 'Orbitron', 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+                'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+:root{
+    --neon-1: #7c3aed;
+    --neon-2: #06b6d4;
+    --glass: rgba(255,255,255,0.04);
+}
+
+body{font-family: 'Orbitron', Inter, sans-serif}
+
+.futuristic-bg{
+    background: linear-gradient(120deg, rgba(124,58,237,0.18), rgba(6,182,212,0.14), rgba(99,102,241,0.12));
+    background-size: 400% 400%;
+    filter: blur(50px) saturate(1.2);
+    opacity: .9;
+    animation: gradientShift 12s ease infinite;
+}
+
+@keyframes gradientShift{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+.neon-btn{
+    background: linear-gradient(90deg, rgba(124,58,237,0.12), rgba(6,182,212,0.06));
+    border: 1px solid rgba(124,58,237,0.18);
+    color: #e6f3ff;
+    box-shadow: 0 6px 30px rgba(124,58,237,0.06), 0 0 18px rgba(6,182,212,0.04);
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+.neon-btn:hover{transform:translateY(-3px);box-shadow:0 16px 60px rgba(124,58,237,0.12),0 0 40px rgba(6,182,212,0.08)}
+
+.frost{background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); backdrop-filter: blur(8px)}
+.shadow-neon{box-shadow: 0 8px 30px rgba(7,12,23,0.6), 0 0 18px rgba(124,58,237,0.12)}
+.text-neon{color:var(--neon-1); text-shadow:0 2px 14px rgba(124,58,237,0.28)}
+
+.card-title{font-weight:700; color:#e6f3ff}
+.table-dark thead{background:transparent}
+.table-dark tbody tr{border-top:1px solid rgba(255,255,255,0.03)}
+
