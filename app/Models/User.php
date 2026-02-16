@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'hopital_id',
     ];
 
     /**
@@ -34,15 +36,54 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string,string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    /* ---------------- Relationships ---------------- */
+    public function hopital()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Hopital::class);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'user_id');
+    }
+
+    /* ---------------- Role helpers ---------------- */
+    public function hasRole($role): bool
+    {
+        if (is_array($role)) {
+            return in_array($this->role, $role, true);
+        }
+
+        return $this->role === $role;
+    }
+
+    public function isAdminGlobal(): bool
+    {
+        return $this->role === 'admin_global';
+    }
+
+    public function isAdminHopital(): bool
+    {
+        return $this->role === 'admin_hopital';
+    }
+
+    public function isMedecin(): bool
+    {
+        return $this->role === 'medecin';
+    }
+
+    public function isReceptionniste(): bool
+    {
+        return $this->role === 'receptionniste';
     }
 }
+
