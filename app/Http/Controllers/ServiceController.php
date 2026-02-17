@@ -13,17 +13,21 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::with('hopital')->get(); // On charge aussi l'hôpital associé
+        $services = Service::with('hopital')->get();
         return view('admin.services.index', compact('services'));
     }
 
     /**
-     * Formulaire de création
+     * Formulaire de création (Gère aussi la sélection automatique via URL)
      */
-    public function create()
+    public function create(Request $request)
     {
-        $hopitaux = Hopital::all(); // Nécessaire pour le menu déroulant
-        return view('admin.services.create', compact('hopitaux'));
+        $hopitaux = Hopital::all();
+
+        // On récupère l'ID passé dans l'URL (ex: ?hopital_id=2)
+        $selectedHopitalId = $request->query('hopital_id');
+
+        return view('admin.services.create', compact('hopitaux', 'selectedHopitalId'));
     }
 
     /**

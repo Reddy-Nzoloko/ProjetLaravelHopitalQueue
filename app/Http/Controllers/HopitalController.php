@@ -11,11 +11,11 @@ class HopitalController extends Controller
     /**
      * Liste tous les hôpitaux du système
      */
-    public function index()
-    {
-        $hopitaux = Hopital::all();
-        return view('admin.hopitaux.index', compact('hopitaux'));
-    }
+    public function index() {
+    // Le "withCount" est magique : il compte les services sans charger toutes les données
+    $hopitaux = Hopital::withCount('services')->get();
+    return view('admin.hopitaux.index', compact('hopitaux'));
+}
 
     /**
      * Formulaire de création
