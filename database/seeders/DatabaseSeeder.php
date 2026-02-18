@@ -15,17 +15,29 @@ class DatabaseSeeder extends Seeder
      */
   public function run(): void
 {
-    // Créer un hôpital
+    // 1. Créer un hôpital de test
     $hopital = \App\Models\Hopital::create([
-        'nom' => 'Clinique Espoir',
-        'adresse' => 'Quartier Latin, N°12',
-        'code_unique' => 'CE-01',
+        'nom' => 'Hôpital Général',
+        'code_unique' => 'HG-001',
+        'adresse' => 'Butembo, RDC'
     ]);
 
-    // Créer un service dans cet hôpital
-    $hopital->services()->create([
-        'nom' => 'Pédiatrie',
-        'prefixe' => 'PED',
+    // 2. Créer un Admin pour cet hôpital
+    \App\Models\User::create([
+        'name' => 'Admin Hopital',
+        'email' => 'admin@hopital.com',
+        'password' => bcrypt('password'),
+        'role' => 'admin_hopital',
+        'hopital_id' => $hopital->id,
+    ]);
+
+    // 3. Créer un Super Admin
+    \App\Models\User::create([
+        'name' => 'Super Admin',
+        'email' => 'super@system.com',
+        'password' => bcrypt('password'),
+        'role' => 'super_admin',
+        'hopital_id' => null,
     ]);
 }
 }

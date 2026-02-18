@@ -11,25 +11,40 @@ class ServiceController extends Controller
     /**
      * Liste des services
      */
-    public function index()
-    {
+    public function index() {
+    $user = auth()->User();
+
+    if ($user->role === 'super_admin') {
+        // Le Super Admin voit tous les services de tous les hôpitaux
         $services = Service::with('hopital')->get();
-        return view('admin.services.index', compact('services'));
+    } else {
+        // L'Admin d'Hôpital ou le Médecin ne voit que les services de SON hôpital
+        $services = Service::where('hopital_id', $user->hopital_id)
+                           ->with('hopital')
+                           ->get();
     }
+
+    return view('admin.services.index', compact('services'));
+}
 
     /**
      * Formulaire de création (Gère aussi la sélection automatique via URL)
      */
     public function create(Request $request)
-    {
+{
+    $user = auth()->User();
+
+    if ($user->role === 'super_admin') {
         $hopitaux = Hopital::all();
-
-        // On récupère l'ID passé dans l'URL (ex: ?hopital_id=2)
-        $selectedHopitalId = $request->query('hopital_id');
-
-        return view('admin.services.create', compact('hopitaux', 'selectedHopitalId'));
+    } else {
+        // Un Admin d'Hôpital ne peut voir QUE son propre hôpital dans le formulaire
+        $hopitaux = Hopital::where('id', $user->hopital_id)->get();
     }
 
+    $selectedHopitalId = $request->query('hopital_id');
+
+    return view('admin.services.create', compact('hopitaux', 'selectedHopitalId'));
+}
     /**
      * Enregistrement du service
      */
