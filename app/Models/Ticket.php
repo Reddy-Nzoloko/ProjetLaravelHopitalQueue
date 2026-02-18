@@ -33,6 +33,7 @@ class Ticket extends Model
 
     // --- TES RELATIONS (CARDINALITÉS) ---
 
+
     // Un ticket appartient à un hôpital
     public function hopital(): BelongsTo
     {
@@ -44,7 +45,7 @@ class Ticket extends Model
     {
         return $this->belongsTo(Service::class);
     }
-
+    
     // Un ticket est traité par un médecin (User)
     public function medecin(): BelongsTo
     {

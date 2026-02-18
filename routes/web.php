@@ -26,6 +26,11 @@ Route::prefix('admin')->group(function () {
 use App\Http\Controllers\TicketController;
 Route::post('/ticket/generer', [TicketController::class, 'store'])->name('ticket.store');
 
+// Route pour afficher la borne de tickets d'un hôpital
+Route::get('/borne/{hopital_id}', [TicketController::class, 'create'])->name('ticket.borne');
+
+// Route pour enregistrer le ticket
+Route::post('/ticket/generer', [TicketController::class, 'store'])->name('ticket.store');
 
 Route::get('/', function () {
     return view('welcome');

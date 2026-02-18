@@ -5,45 +5,55 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\Service;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class TicketController extends Controller
 {
     /**
-     * Cette fonction va créer un ticket pour un patient
+     * Affiche l'interface de prise de ticket pour un hôpital précis
+     */
+    public function create($hopital_id)
+    {
+        $services = Service::where('hopital_id', $hopital_id)->get();
+        return view('tickets.create', compact('services', 'hopital_id'));
+    }
+
+    /**
+     * Génère le ticket en base de données
      */
     public function store(Request $request)
     {
-        // 1. On vérifie que le service_id est bien envoyé
         $request->validate([
             'service_id' => 'required|exists:services,id',
         ]);
 
-        // 2. On récupère les infos du service (pour avoir le préfixe comme "PED")
-        $service = Service::findOrFail($request->service_id);
+        $service = Service::find($request->service_id);
 
-        // 3. On calcule le numéro : On compte les tickets du jour pour ce service + 1
-        $count = Ticket::where('service_id', $service->id)
-                       ->whereDate('created_at', Carbon::today())
-                       ->count();
+        // Logique pour calculer le numéro suivant (ex: PED-001, PED-002)
+        $dernierTicket = Ticket::where('service_id', $service->id)
+            ->whereDate('created_at', today())
+            ->count();
 
-        $numeroSuivant = $count + 1;
+        $numero = $dernierTicket + 1;
+        $codeTicket = $service->prefixe . '-' . str_pad($numero, 3, '0', STR_PAD_LEFT);
 
-        // 4. On crée le numéro formaté (ex: PED-001)
-        // str_pad ajoute les zéros pour faire "001" au lieu de "1"
-        $numeroTicket = $service->prefixe . '-' . str_pad($numeroSuivant, 3, '0', STR_PAD_LEFT);
-
-        // 5. Enregistrement dans la base de données
         $ticket = Ticket::create([
-            'hopital_id'    => $service->hopital_id,
-            'service_id'    => $service->id,
-            'numero_ticket' => $numeroTicket,
-            'priorite'      => $request->priorite ?? 'normale',
-            'statut'        => 'en_attente',
-            'heure_arrivee' => now(),
+            'service_id' => $service->id,
+            'numero' => $numero,
+            'code_ticket' => $codeTicket,
+            'statut' => 'en_attente',
         ]);
 
-        // 6. On retourne une réponse (pour l'instant en texte, plus tard vers une vue)
-        return "Ticket généré avec succès : " . $ticket->numero_ticket;
+        return redirect()->back()->with('success_ticket', $codeTicket);
     }
+    //
+    public function index()
+{
+    // On récupère les tickets qui attendent encore
+    $ticketsAttente = Ticket::where('statut', 'en_attente')
+                            ->whereDate('created_at', today())
+                            ->orderBy('created_at', 'asc')
+                            ->get();
+
+    return view('tickets.index', compact('ticketsAttente'));
+}
 }
