@@ -15,10 +15,10 @@ class ServiceController extends Controller
     public function index() {
     $user = Auth::user();
 
-    if ($user->role === 'super_admin') {
-        // Le Super Admin voit tous les services de tous les hôpitaux
-        $services = Service::with('hopital')->get();
-    } else {
+    // Remplace 'super_admin' par 'admin_global'
+if ($user->role === 'admin_global') {
+    $services = Service::with('hopital')->get();
+} else {
         // L'Admin d'Hôpital ou le Médecin ne voit que les services de SON hôpital
         $services = Service::where('hopital_id', $user->hopital_id)
                            ->with('hopital')
