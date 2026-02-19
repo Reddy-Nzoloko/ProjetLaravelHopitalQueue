@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Service;
 use App\Models\Hopital;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
@@ -12,7 +13,7 @@ class ServiceController extends Controller
      * Liste des services
      */
     public function index() {
-    $user = auth()->User();
+    $user = Auth::user();
 
     if ($user->role === 'super_admin') {
         // Le Super Admin voit tous les services de tous les hôpitaux
@@ -32,7 +33,7 @@ class ServiceController extends Controller
      */
     public function create(Request $request)
 {
-    $user = auth()->User();
+    $user = Auth::user();
 
     if ($user->role === 'super_admin') {
         $hopitaux = Hopital::all();
