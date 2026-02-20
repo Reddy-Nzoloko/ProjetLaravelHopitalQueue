@@ -16,9 +16,9 @@ class DatabaseSeeder extends Seeder
 public function run(): void
 {
     \App\Models\User::create([
-        'name' => 'Ton Nom',
-        'email' => 'admin@test.com',
-        'password' => bcrypt('password'), // Ton mot de passe sera 'password'
+        'name' => 'admin',
+        'email' => 'admin@gmail.com',
+        'password' => bcrypt('admin'), // Ton mot de passe sera 'password'
         'role' => 'admin_global',        // Très important pour ton ServiceController
     ]);
 }

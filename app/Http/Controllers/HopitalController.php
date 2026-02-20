@@ -20,10 +20,10 @@ class HopitalController extends Controller
     /**
      * Formulaire de création
      */
-    public function create()
-    {
-        return view('admin.hopitaux.create');
-    }
+   public function create()
+{
+    return view('admin.hopitaux.create');
+}
 
     /**
      * Enregistrer l'hôpital
