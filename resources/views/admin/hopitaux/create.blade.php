@@ -6,43 +6,52 @@
     <title>Ajouter un Hôpital</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-10">
+<body class="bg-gradient-to-br from-blue-50 via-white to-blue-50 min-h-screen flex items-center justify-center p-6">
 
-    <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-md">
-        <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Nouvel Établissement</h1>
-            <a href="{{ route('hopitaux.index') }}" class="text-blue-500 hover:underline">← Retour</a>
+    <div class="max-w-2xl w-full bg-white p-10 rounded-2xl shadow-xl border border-gray-200">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">Nouvel Établissement</h1>
+            <a href="{{ route('hopitaux.index') }}"
+               class="text-blue-600 font-semibold hover:text-blue-800 transition duration-200 flex items-center gap-1">
+               ← Retour
+            </a>
         </div>
 
+        <!-- Error Messages -->
         @if ($errors->any())
-            <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
-                <ul>
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+                <ul class="list-disc list-inside space-y-1">
                     @foreach ($errors->all() as $error)
-                        <li>• {{ $error }}</li>
+                        <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
         @endif
 
-        <form action="{{ route('hopitaux.store') }}" method="POST">
+        <!-- Formulaire -->
+        <form action="{{ route('hopitaux.store') }}" method="POST" class="space-y-6">
             @csrf
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Nom de l'hôpital</label>
+            <!-- Nom de l'hôpital -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nom de l'hôpital</label>
                 <input type="text" name="nom" value="{{ old('nom') }}" required
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
                     placeholder="Ex: Clinique Espoir">
             </div>
 
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700">Adresse complète</label>
-                <textarea name="adresse" rows="3" required
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="N°12, Avenue du Commerce..."></textarea>
+            <!-- Adresse complète -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Adresse complète</label>
+                <textarea name="adresse" rows="4" required
+                    class="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
+                    placeholder="N°12, Avenue du Commerce...">{{ old('adresse') }}</textarea>
             </div>
 
+            <!-- Bouton -->
             <button type="submit"
-                class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-md hover:bg-blue-700 transition duration-200">
+                class="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl shadow-md hover:from-blue-600 hover:to-blue-700 transition duration-300">
                 Enregistrer l'Hôpital
             </button>
         </form>
