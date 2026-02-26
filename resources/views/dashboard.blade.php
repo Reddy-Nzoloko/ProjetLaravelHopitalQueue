@@ -2,7 +2,6 @@
     <div class="flex min-h-screen bg-gray-100">
 
         {{-- SIDEBAR --}}
-        <h1 style="color:red">TEST MODIFICATION</h1>
         <aside class="w-64 bg-gray-900 text-white hidden md:block">
             <div class="p-6 text-2xl font-bold border-b border-gray-700">
                 🏥 Hospital Queue

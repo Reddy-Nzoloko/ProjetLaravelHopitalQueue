@@ -13,10 +13,16 @@
             <h1 class="text-4xl font-extrabold text-gray-800 tracking-tight">Système Multi-Hôpitaux</h1>
             <a href="{{ route('hopitaux.create') }}"
                class="bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-green-600 transition font-semibold flex items-center gap-2">
-               + Ajouter un hôpital
+               + Ajouter un hôpital 
                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                </svg>
+            </a>
+        </div>
+        <!-- Navigation dans l'application -->
+        <div class="mb-6">
+            <a href="{{ route('dashboard') }}" class="text-blue-600 font-semibold hover:text-blue-800 transition duration-200 flex items-center gap-1">
+                ← Tableau de bord
             </a>
         </div>
 
