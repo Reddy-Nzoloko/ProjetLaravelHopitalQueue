@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hopital;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -44,5 +45,46 @@ public function store(Request $request)
 
     // Redirection vers le dashboard avec un message de succès
     return redirect()->route('dashboard')->with('success', 'Agent créé avec succès !');
+}
+
+/**
+ * Formulaire de création d'un admin d'hôpital (depuis le dashboard)
+ */
+public function createAdmin(Hopital $hopital): View
+{
+    // Vérifier que l'utilisateur est admin global
+    if (Auth::user()->role !== 'admin_global') {
+        abort(403, 'Accès non autorisé');
+    }
+
+    return view('auth.register-admin', compact('hopital'));
+}
+
+/**
+ * Enregistrer un admin d'hôpital depuis le dashboard
+ */
+public function storeAdmin(Request $request, Hopital $hopital): RedirectResponse
+{
+    // Vérifier que l'utilisateur est admin global
+    if (Auth::user()->role !== 'admin_global') {
+        abort(403, 'Accès non autorisé');
+    }
+
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+        'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+    ]);
+
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => 'admin_hopital',
+        'hopital_id' => $hopital->id,
+    ]);
+
+    return redirect()->route('hopitaux.index')
+        ->with('success', "Administrateur '{$request->name}' ajouté(e) pour l'hôpital '{$hopital->nom}' !");
 }
 }

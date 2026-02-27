@@ -26,8 +26,8 @@
                     🎟️ Tickets
                 </a>
 
-                <a href="#" class="block py-2 px-4 rounded hover:bg-gray-800">
-                    👥 Utilisateurs
+                <a href="{{ route('register') }}" class="block py-2 px-4 rounded hover:bg-gray-800 flex items-center">
+                    👤 Créer un Agent
                 </a>
             </nav>
         </aside>
@@ -85,7 +85,31 @@
                         </p>
                     </div>
                 </div>
+                <!-- gestion de utilisateur -->
+                {{-- SECTION AGENTS/UTILISATEURS --}}
+                @if(auth()->user()->role === 'admin_global')
+                <div class="bg-white p-6 rounded-xl shadow mt-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-700">
+                            Gestion des Utilisateurs & Admins
+                        </h2>
 
+                        <a href="{{ route('register') }}"
+                            class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                            ➕ Créer un Administrateur d'Hôpital
+                        </a>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <a href="{{ route('register') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+    ➕ Créer un Administrateur d'Hôpital
+</a>
+                        <a href="#" class="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center">
+                            🔐 Gérer les rôles et permissions
+                        </a>
+                    </div>
+                </div>
+                @endif
                 {{-- SECTION HOPITAUX --}}
                 @if(auth()->user()->role === 'admin_global')
                 <div class="bg-white p-6 rounded-xl shadow">
@@ -96,7 +120,7 @@
                         </h2>
 
                         <a href="{{ route('hopitaux.create') }}"
-                           class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
                             ➕ Ajouter un Hôpital
                         </a>
                     </div>
@@ -104,22 +128,22 @@
                     <div class="grid md:grid-cols-2 gap-4">
 
                         <a href="{{ route('hopitaux.index') }}"
-                           class="p-4 border rounded-lg hover:bg-gray-50 transition">
+                            class="p-4 border rounded-lg hover:bg-gray-50 transition">
                             📋 Voir tous les hôpitaux
                         </a>
 
                         <a href="#"
-                           class="p-4 border rounded-lg hover:bg-gray-50 transition">
+                            class="p-4 border rounded-lg hover:bg-gray-50 transition">
                             📊 Statistiques par hôpital
                         </a>
 
                         <a href="#"
-                           class="p-4 border rounded-lg hover:bg-gray-50 transition">
+                            class="p-4 border rounded-lg hover:bg-gray-50 transition">
                             ⚙️ Paramètres globaux
                         </a>
 
                         <a href="#"
-                           class="p-4 border rounded-lg hover:bg-gray-50 transition">
+                            class="p-4 border rounded-lg hover:bg-gray-50 transition">
                             🗂️ Export des données
                         </a>
 

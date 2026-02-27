@@ -61,13 +61,22 @@
                         </td>
                         <td class="px-6 py-4 text-gray-600 text-sm italic">{{ Str::limit($hopital->adresse, 35) }}</td>
                         <td class="px-6 py-4 text-right">
-                            <a href="{{ route('services.create', ['hopital_id' => $hopital->id]) }}"
-                               class="inline-flex items-center text-sm bg-indigo-500 text-white px-4 py-2 rounded-xl hover:bg-indigo-600 font-semibold shadow-sm transition">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                </svg>
-                                Ajouter Service
-                            </a>
+                            <div class="flex gap-2 justify-end">
+                                <a href="{{ route('services.create', ['hopital_id' => $hopital->id]) }}"
+                                   class="inline-flex items-center text-sm bg-indigo-500 text-white px-4 py-2 rounded-xl hover:bg-indigo-600 font-semibold shadow-sm transition">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    Service
+                                </a>
+                                <a href="{{ route('register.admin', $hopital) }}"
+                                   class="inline-flex items-center text-sm bg-purple-500 text-white px-4 py-2 rounded-xl hover:bg-purple-600 font-semibold shadow-sm transition">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    Admin
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     @endforeach

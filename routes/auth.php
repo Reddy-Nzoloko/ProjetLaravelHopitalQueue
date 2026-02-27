@@ -56,4 +56,10 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+    // Route pour créer un admin d'hôpital depuis le dashboard
+    Route::get('hopitaux/{hopital}/create-admin', [RegisteredUserController::class, 'createAdmin'])
+        ->name('register.admin');
+    Route::post('hopitaux/{hopital}/store-admin', [RegisteredUserController::class, 'storeAdmin'])
+        ->name('register.admin.store');
 });
