@@ -87,4 +87,48 @@ public function storeAdmin(Request $request, Hopital $hopital): RedirectResponse
     return redirect()->route('hopitaux.index')
         ->with('success', "Administrateur '{$request->name}' ajouté(e) pour l'hôpital '{$hopital->nom}' !");
 }
-}
+    /**
+     * Formulaire d'ajout de médecin pour un hôpital donné
+     */
+    public function createMedecin(Hopital $hopital): View
+    {
+        $user = Auth::user();
+        if (!in_array($user->role, ['admin_global', 'admin_hopital'])) {
+            abort(403, 'Accès non autorisé');
+        }
+        // Si c'est un admin_hopital, s'assurer qu'il correspond à l'hôpital
+        if ($user->role === 'admin_hopital' && $user->hopital_id !== $hopital->id) {
+            abort(403, 'Accès non autorisé');
+        }
+
+        return view('auth.register-medecin', compact('hopital'));
+    }
+
+    public function storeMedecin(Request $request, Hopital $hopital): RedirectResponse
+    {
+        $user = Auth::user();
+        if (!in_array($user->role, ['admin_global', 'admin_hopital'])) {
+            abort(403, 'Accès non autorisé');
+        }
+
+        if ($user->role === 'admin_hopital' && $user->hopital_id !== $hopital->id) {
+            abort(403, 'Accès non autorisé');
+        }
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+        ]);
+
+        $new = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'medecin',
+            'hopital_id' => $hopital->id,
+        ]);
+
+        return redirect()->route('dashboard')
+            ->with('success', "Médecin '{\$request->name}' ajouté(e) pour l'hôpital '{\$hopital->nom}' !");
+    }}

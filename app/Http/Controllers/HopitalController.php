@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Hopital;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class HopitalController extends Controller
 {
@@ -12,9 +13,19 @@ class HopitalController extends Controller
      * Liste tous les hôpitaux du système
      */
     public function index() {
-    // Le "withCount" est magique : il compte les services sans charger toutes les données
-    $hopitaux = Hopital::withCount('services')->get();
-    return view('admin.hopitaux.index', compact('hopitaux'));
+        $user = Auth::user();
+
+        if ($user->role === 'admin_global') {
+            // Le "withCount" est magique : il compte les services sans charger toutes les données
+            $hopitaux = Hopital::withCount('services')->get();
+        } else {
+            // Admin d'hôpital ne voit que son propre établissement
+            $hopitaux = Hopital::where('id', $user->hopital_id)
+                               ->withCount('services')
+                               ->get();
+        }
+
+        return view('admin.hopitaux.index', compact('hopitaux'));
 }
 
     /**
@@ -22,6 +33,10 @@ class HopitalController extends Controller
      */
    public function create()
 {
+    if (Auth::user()->role !== 'admin_global') {
+        abort(403, 'Autorisation requise');
+    }
+
     return view('admin.hopitaux.create');
 }
 

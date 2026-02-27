@@ -19,10 +19,10 @@ class ServiceController extends Controller
 if ($user->role === 'admin_global') {
     $services = Service::with('hopital')->get();
 } else {
-        // L'Admin d'Hôpital ou le Médecin ne voit que les services de SON hôpital
-        $services = Service::where('hopital_id', $user->hopital_id)
-                           ->with('hopital')
-                           ->get();
+    // L'Admin d'Hôpital ou le Médecin ne voit que les services de SON hôpital
+    $services = Service::where('hopital_id', $user->hopital_id)
+                       ->with('hopital')
+                       ->get();
     }
 
     return view('admin.services.index', compact('services'));

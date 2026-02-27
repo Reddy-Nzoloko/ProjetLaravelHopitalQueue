@@ -26,9 +26,7 @@
                     🎟️ Tickets
                 </a>
 
-                <a href="{{ route('register') }}" class="block py-2 px-4 rounded hover:bg-gray-800 flex items-center">
-                    👤 Créer un Agent
-                </a>
+
             </nav>
         </aside>
 
@@ -94,18 +92,40 @@
                             Gestion des Utilisateurs & Admins
                         </h2>
 
-                        <a href="{{ route('register') }}"
+                        <a href="{{ route('hopitaux.index') }}"
                             class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
-                            ➕ Créer un Administrateur d'Hôpital
+                            🏥 Gérer les Hôpitaux
                         </a>
                     </div>
 
                     <div class="grid md:grid-cols-2 gap-4">
-                        <a href="{{ route('register') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
-    ➕ Créer un Administrateur d'Hôpital
-</a>
+                        <a href="{{ route('hopitaux.index') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                            🏥 Gérer les Hôpitaux
+                        </a>
                         <a href="#" class="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center">
                             🔐 Gérer les rôles et permissions
+                        </a>
+                    </div>
+                </div>
+                @elseif(auth()->user()->role === 'admin_hopital')
+                <div class="bg-white p-6 rounded-xl shadow mt-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-700">
+                            Gestion du personnel & Services
+                        </h2>
+
+                        <a href="{{ route('register.medecin', auth()->user()->hopital) }}"
+                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                            ➕ Ajouter un Médecin
+                        </a>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <a href="{{ route('register.medecin', auth()->user()->hopital) }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                            ➕ Ajouter un Médecin
+                        </a>
+                        <a href="{{ route('services.create', ['hopital_id' => auth()->user()->hopital_id]) }}" class="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center">
+                            ➕ Ajouter un Service
                         </a>
                     </div>
                 </div>

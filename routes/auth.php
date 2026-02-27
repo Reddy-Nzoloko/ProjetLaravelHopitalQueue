@@ -62,4 +62,10 @@ Route::middleware('auth')->group(function () {
         ->name('register.admin');
     Route::post('hopitaux/{hopital}/store-admin', [RegisteredUserController::class, 'storeAdmin'])
         ->name('register.admin.store');
+
+    // Ajout d'un médecin (route accessible par admin_hopital)
+    Route::get('hopitaux/{hopital}/create-medecin', [RegisteredUserController::class, 'createMedecin'])
+        ->name('register.medecin');
+    Route::post('hopitaux/{hopital}/store-medecin', [RegisteredUserController::class, 'storeMedecin'])
+        ->name('register.medecin.store');
 });
