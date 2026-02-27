@@ -18,6 +18,15 @@
                 </a>
                 @endif
 
+                @if(auth()->user()->role === 'medecin')
+                <a href="{{ route('services.index') }}" class="block py-2 px-4 rounded hover:bg-gray-800">
+                    💼 Mon service
+                </a>
+
+                <a href="#" class="block py-2 px-4 rounded hover:bg-gray-800">
+                    🎟️ Mes tickets
+                </a>
+                @else
                 <a href="{{ route('services.index') }}" class="block py-2 px-4 rounded hover:bg-gray-800">
                     💼 Services
                 </a>
@@ -25,6 +34,7 @@
                 <a href="#" class="block py-2 px-4 rounded hover:bg-gray-800">
                     🎟️ Tickets
                 </a>
+                @endif
 
 
             </nav>
@@ -61,6 +71,12 @@
                             {{ $stats['total_hopitaux'] ?? 0 }}
                         </p>
                     </div>
+                    @if(auth()->user()->role === 'medecin' && auth()->user()->service)
+                    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition col-span-full">
+                        <h3 class="text-gray-500 text-sm">Mon Service</h3>
+                        <p class="text-xl font-bold text-green-600">{{ auth()->user()->service->nom }}</p>
+                    </div>
+                    @endif
 
                     <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
                         <h3 class="text-gray-500 text-sm">Services</h3>

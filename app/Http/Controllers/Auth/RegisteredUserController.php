@@ -101,7 +101,10 @@ public function storeAdmin(Request $request, Hopital $hopital): RedirectResponse
             abort(403, 'Accès non autorisé');
         }
 
-        return view('auth.register-medecin', compact('hopital'));
+        // Récupérer les services de cet hôpital pour la sélection
+        $services = $hopital->services()->get();
+
+        return view('auth.register-medecin', compact('hopital', 'services'));
     }
 
     public function storeMedecin(Request $request, Hopital $hopital): RedirectResponse
@@ -119,7 +122,9 @@ public function storeAdmin(Request $request, Hopital $hopital): RedirectResponse
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+            'service_id' => ['required', 'exists:services,id'],
         ]);
+
 
         $new = User::create([
             'name' => $request->name,
@@ -127,8 +132,9 @@ public function storeAdmin(Request $request, Hopital $hopital): RedirectResponse
             'password' => Hash::make($request->password),
             'role' => 'medecin',
             'hopital_id' => $hopital->id,
-        ]);
+        'service_id' => $request->service_id,        ]);
 
         return redirect()->route('dashboard')
-            ->with('success', "Médecin '{\$request->name}' ajouté(e) pour l'hôpital '{\$hopital->nom}' !");
-    }}
+            ->with('success', "Médecin '{$request->name}' ajouté(e) pour l'hôpital '{$hopital->nom}' !");
+    }
+}

@@ -50,17 +50,21 @@ class TicketController extends Controller
     //
     public function index()
 {
-    // On récupère les tickets qui attendent encore
-    $ticketsAttente = Ticket::where('statut', 'en_attente')
-                            ->whereDate('created_at', today())
-                            ->orderBy('created_at', 'asc')
-                            ->get();
+    $user = auth()->user();
 
-                            // affichage de nombres de ticjets en attente
-                            $ticketsAttente = Ticket::where('statut', 'en_attente')->whereDate('created_at', today())->get();
-    $totalTickets = Ticket::whereDate('created_at', today())->count(); // On compte tout
+    $query = Ticket::where('statut', 'en_attente')
+                   ->whereDate('created_at', today())
+                   ->orderBy('created_at', 'asc');
+
+    if ($user->role === 'admin_hopital') {
+        $query->where('hopital_id', $user->hopital_id);
+    } elseif ($user->role === 'medecin') {
+        $query->where('service_id', $user->service_id);
+    }
+
+    $ticketsAttente = $query->get();
+    $totalTickets = $query->count();
 
     return view('tickets.index', compact('ticketsAttente', 'totalTickets'));
-    return view('tickets.index', compact('ticketsAttente'));
 }
 }

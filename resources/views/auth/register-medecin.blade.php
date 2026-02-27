@@ -27,6 +27,20 @@
                     </div>
 
                     <div class="mt-4">
+                        <x-input-label for="service_id" :value="__('Service')" class="text-slate-300" />
+                        <select name="service_id" id="service_id" required
+                            class="block mt-1 w-full bg-slate-900 border-slate-700 text-white rounded-md shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
+                            <option value="">-- Sélectionner un service --</option>
+                            @foreach($services as $service)
+                                <option value="{{ $service->id }}">{{ $service->nom }}</option>
+                            @endforeach
+                        </select>
+                        @error('service_id')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="mt-4">
                         <x-input-label for="password" :value="__('Mot de passe')" class="text-slate-300" />
                         <x-text-input id="password" class="block mt-1 w-full bg-slate-900 border-slate-700 text-white focus:border-emerald-500 focus:ring-emerald-500" type="password" name="password" required />
                         @error('password')

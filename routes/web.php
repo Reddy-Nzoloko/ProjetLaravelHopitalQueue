@@ -37,5 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Ressources pour les services
     Route::resource('services', ServiceController::class);
+    // détail du service (médecins, etc.)
+    Route::get('services/{service}/show', [ServiceController::class, 'show'])->name('services.show');
 
 });

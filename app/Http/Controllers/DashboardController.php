@@ -41,8 +41,18 @@ class DashboardController extends Controller
             ];
 
             $hopitaux = $hopital ? collect([$hopital->loadCount('services')]) : collect();
+        } elseif ($user->role === 'medecin') {
+            // Statistiques très limitées au service du médecin
+            $service = $user->service;
+            $stats = [
+                'total_hopitaux' => $service ? 1 : 0,
+                'total_services' => $service ? 1 : 0,
+                'total_users'    => $service ? $service->medecins()->count() : 0,
+                'total_tickets'  => $service ? Ticket::where('service_id', $service->id)->count() : 0,
+            ];
+            $hopitaux = $service && $service->hopital ? collect([$service->hopital->loadCount('services')]) : collect();
         } else {
-            // les autres rôles (medecin, etc.) voient très peu
+            // autres rôles (réceptionnistes, etc.) affichage minimal
             $stats = [
                 'total_hopitaux' => 0,
                 'total_services' => 0,

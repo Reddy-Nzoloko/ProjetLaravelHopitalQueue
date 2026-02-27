@@ -30,19 +30,27 @@
                         <th class="px-6 py-3 text-sm font-semibold text-gray-600">Service</th>
                         <th class="px-6 py-3 text-sm font-semibold text-gray-600">Préfixe</th>
                         <th class="px-6 py-3 text-sm font-semibold text-gray-600">Hôpital Parent</th>
+                        <th class="px-6 py-3 text-sm font-semibold text-gray-600">Médecins</th>
                         <th class="px-6 py-3 text-sm font-semibold text-gray-600 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse($services as $service)
                     <tr>
-                        <td class="px-6 py-4 text-gray-900 font-medium">{{ $service->nom }}</td>
+                        <td class="px-6 py-4 text-gray-900 font-medium">
+                            <a href="{{ route('services.show', $service) }}" class="hover:underline">
+                                {{ $service->nom }}
+                            </a>
+                        </td>
                         <td class="px-6 py-4">
                             <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-bold uppercase">
                                 {{ $service->prefixe }}
                             </span>
                         </td>
                         <td class="px-6 py-4 text-gray-600">{{ $service->hopital->nom }}</td>
+                        <td class="px-6 py-4 text-gray-600">
+                            {{ $service->medecins()->count() }} médecin(s)
+                        </td>
                         <td class="px-6 py-4 text-right">
                             <a href="{{ route('ticket.borne', $service->hopital->id) }}"
                                target="_blank"

@@ -32,5 +32,13 @@ class Service extends Model
     {
         return $this->hasMany(Ticket::class);
     }
+
+    /**
+     * Les médecins rattachés à ce service.
+     */
+    public function medecins(): HasMany
+    {
+        return $this->hasMany(\App\Models\User::class, 'service_id');
+    }
     
 }
