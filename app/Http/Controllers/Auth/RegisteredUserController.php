@@ -17,34 +17,32 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
-    {
-        return view('auth.register');
-    }
+   public function create()
+{
+    // On récupère la liste des hôpitaux pour le menu déroulant
+    $hopitaux = \App\Models\Hopital::all();
+    return view('auth.register', compact('hopitaux'));
+}
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+        'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+        'role' => ['required', 'string'],
+        'hopital_id' => ['nullable', 'exists:hopitaux,id'], // Nullable si c'est un autre Admin Global
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => $request->role,
+        'hopital_id' => $request->hopital_id,
+    ]);
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
-    }
+    // Redirection vers le dashboard avec un message de succès
+    return redirect()->route('dashboard')->with('success', 'Agent créé avec succès !');
+}
 }
