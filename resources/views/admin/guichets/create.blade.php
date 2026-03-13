@@ -39,6 +39,12 @@
                 </div>
             @else
                 <!-- for admin_hopital or medecin we already know hopital_id -->
+                @if(auth()->user()->role === 'medecin')
+                <div class="mb-4">
+                    <label class="block text-gray-700">Service</label>
+                    <p class="text-gray-600">{{ $services->first()->nom ?? 'Aucun service' }}</p>
+                </div>
+                @else
                 <div class="mb-4">
                     <label class="block text-gray-700">Service (facultatif)</label>
                     <select name="service_id" class="w-full border rounded px-3 py-2">
@@ -48,6 +54,7 @@
                         @endforeach
                     </select>
                 </div>
+                @endif
             @endif
 
             <div class="mb-4">

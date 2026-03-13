@@ -23,12 +23,20 @@
                     💼 Mon service
                 </a>
 
+                <a href="{{ route('guichets.index') }}" class="block py-2 px-4 rounded hover:bg-gray-800">
+                    🏪 Mes guichets
+                </a>
+
                 <a href="#" class="block py-2 px-4 rounded hover:bg-gray-800">
                     🎟️ Mes tickets
                 </a>
                 @else
                 <a href="{{ route('services.index') }}" class="block py-2 px-4 rounded hover:bg-gray-800">
                     💼 Services
+                </a>
+
+                <a href="{{ route('guichets.index') }}" class="block py-2 px-4 rounded hover:bg-gray-800">
+                    🏪 Guichets
                 </a>
 
                 <a href="#" class="block py-2 px-4 rounded hover:bg-gray-800">
@@ -57,6 +65,11 @@
                     <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm">
                         {{ auth()->user()->role }}
                     </span>
+
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="text-gray-600 hover:text-gray-800">Se déconnecter</button>
+                    </form>
                 </div>
             </header>
 
@@ -99,7 +112,8 @@
                         </p>
                     </div>
 
-                    @if(auth()->user()->role === 'medecin' && $guichet)
+                    @if(auth()->user()->role === 'medecin')
+                    @if($guichet)
                     <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition col-span-full">
                         <h3 class="text-gray-500 text-sm">Mon Guichet</h3>
                         <p class="text-xl font-bold {{ $guichet->est_ouvert ? 'text-green-600' : 'text-red-600' }}">
@@ -122,6 +136,13 @@
                         </form>
                         @endif
                     </div>
+                    @else
+                    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition col-span-full">
+                        <h3 class="text-gray-500 text-sm">Mon Guichet</h3>
+                        <p class="text-lg text-gray-600">Aucun guichet créé pour votre service.</p>
+                        <a href="{{ route('guichets.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 inline-block mt-2">Créer un guichet</a>
+                    </div>
+                    @endif
                     @endif
                 </div>
                 <!-- gestion de utilisateur -->
