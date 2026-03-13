@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use App\Models\Service;
+use App\Models\Guichet;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -13,8 +14,16 @@ class TicketController extends Controller
      */
     public function create($hopital_id)
     {
+        // liste des services pour l'hôpital demandé (même si on utilise souvent le guichet)
         $services = Service::where('hopital_id', $hopital_id)->get();
-        return view('tickets.create', compact('services', 'hopital_id'));
+
+        // si des guichets ouverts existent, on les montrera en priorité
+        $guichets = Guichet::where('hopital_id', $hopital_id)
+                             ->where('est_ouvert', true)
+                             ->with('service')
+                             ->get();
+
+        return view('tickets.create', compact('services', 'guichets', 'hopital_id'));
     }
 
     /**
@@ -23,12 +32,23 @@ class TicketController extends Controller
     public function store(Request $request)
 {
     $request->validate([
-        'service_id' => 'required|exists:services,id',
+        'service_id'  => 'nullable|exists:services,id',
+        'guichet_id'  => 'nullable|exists:guichets,id',
     ]);
 
-    $service = Service::find($request->service_id);
+    // déterminer le service sélectionné, en donnant priorité au guichet
+    if ($request->filled('guichet_id')) {
+        $guichet = Guichet::find($request->guichet_id);
+        $service = $guichet->service ?? Service::find($request->service_id);
+    } else {
+        $service = Service::find($request->service_id);
+    }
 
-    // 1. Calcul du numéro (Basé sur numero_ticket dans ton modèle)
+    if (! $service) {
+        abort(400, 'Service non spécifié');
+    }
+
+    // numéro de ticket calculé par service
     $dernierTicketCount = Ticket::where('service_id', $service->id)
         ->whereDate('created_at', today())
         ->count();
@@ -36,13 +56,13 @@ class TicketController extends Controller
     $numero = $dernierTicketCount + 1;
     $codeTicket = $service->prefixe . '-' . str_pad($numero, 3, '0', STR_PAD_LEFT);
 
-    // 2. Création avec les bons noms de colonnes de ton modèle
     Ticket::create([
-        'hopital_id'    => $service->hopital_id, // Récupéré via le service
+        'hopital_id'    => $service->hopital_id,
         'service_id'    => $service->id,
-        'numero_ticket' => $codeTicket,          // Nom dans ton $fillable
+        'guichet_id'    => $request->guichet_id,
+        'numero_ticket' => $codeTicket,
         'statut'        => 'en_attente',
-        'heure_arrivee' => now(),                // Pour tes casts datetime
+        'heure_arrivee' => now(),
     ]);
 
     return redirect()->back()->with('success_ticket', $codeTicket);

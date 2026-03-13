@@ -143,6 +143,25 @@
                         <a href="{{ route('services.create', ['hopital_id' => auth()->user()->hopital_id]) }}" class="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center">
                             ➕ Ajouter un Service
                         </a>
+                        <a href="{{ route('guichets.create') }}" class="p-4 border rounded-lg hover:bg-gray-50 transition flex items-center">
+                            🎫 Ajouter un Guichet
+                        </a>
+                    </div>
+                </div>
+                @elseif(auth()->user()->role === 'medecin')
+                <div class="bg-white p-6 rounded-xl shadow mt-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-700">
+                            Mes guichets
+                        </h2>
+                        <a href="{{ route('guichets.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                            ➕ Créer un Guichet
+                        </a>
+                    </div>
+                    <div class="p-4">
+                        <a href="{{ route('guichets.index') }}" class="text-blue-600 hover:underline">
+                            Liste des guichets de mon hôpital
+                        </a>
                     </div>
                 </div>
                 @endif

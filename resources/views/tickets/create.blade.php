@@ -23,18 +23,35 @@
             </div>
         @endif
 
-        <div class="grid grid-cols-1 gap-4">
-            @foreach($services as $service)
-                <form action="{{ route('ticket.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="service_id" value="{{ $service->id }}">
-                    <button type="submit"
-                        class="w-full bg-white text-slate-900 py-6 rounded-2xl text-2xl font-bold hover:bg-blue-500 hover:text-white transition-all transform active:scale-95 shadow-lg">
-                        {{ $service->nom }}
-                    </button>
-                </form>
-            @endforeach
-        </div>
+        @if(!empty($guichets) && $guichets->count())
+            <p class="mb-4 text-gray-400">Choisissez le guichet où vous vous trouvez</p>
+            <div class="grid grid-cols-1 gap-4">
+                @foreach($guichets as $guichet)
+                    <form action="{{ route('ticket.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="guichet_id" value="{{ $guichet->id }}">
+                        <input type="hidden" name="service_id" value="{{ $guichet->service?->id }}">
+                        <button type="submit"
+                            class="w-full bg-white text-slate-900 py-6 rounded-2xl text-2xl font-bold hover:bg-blue-500 hover:text-white transition-all transform active:scale-95 shadow-lg">
+                            {{ $guichet->nom }} @if($guichet->service) ({{ $guichet->service->nom }})@endif
+                        </button>
+                    </form>
+                @endforeach
+            </div>
+        @else
+            <div class="grid grid-cols-1 gap-4">
+                @foreach($services as $service)
+                    <form action="{{ route('ticket.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="service_id" value="{{ $service->id }}">
+                        <button type="submit"
+                            class="w-full bg-white text-slate-900 py-6 rounded-2xl text-2xl font-bold hover:bg-blue-500 hover:text-white transition-all transform active:scale-95 shadow-lg">
+                            {{ $service->nom }}
+                        </button>
+                    </form>
+                @endforeach
+            </div>
+        @endif
     </div>
 
 </body>

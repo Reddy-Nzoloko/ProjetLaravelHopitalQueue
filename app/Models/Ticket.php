@@ -57,4 +57,12 @@ class Ticket extends Model
     {
         return $this->hasOne(Consultation::class);
     }
+
+    /**
+     * Optionnellement le ticket a été pris à un guichet physique.
+     */
+    public function guichet(): BelongsTo
+    {
+        return $this->belongsTo(Guichet::class);
+    }
 }
