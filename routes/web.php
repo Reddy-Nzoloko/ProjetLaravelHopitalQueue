@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('services/{service}/show', [ServiceController::class, 'show'])->name('services.show');
 
     // gestion des guichets (docteurs/administrateurs peuvent en créer)
-    Route::resource('guichets', GuichetController::class)->only(['index','create','store']);
+    Route::resource('guichets', GuichetController::class)->only(['index','create','store','update']);
 
     // bornes et tickets
     Route::get('tickets/borne/{hopital}', [TicketController::class, 'create'])->name('ticket.borne');

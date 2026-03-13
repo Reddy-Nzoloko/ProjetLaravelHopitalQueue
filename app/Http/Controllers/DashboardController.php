@@ -51,6 +51,10 @@ class DashboardController extends Controller
                 'total_tickets'  => $service ? Ticket::where('service_id', $service->id)->count() : 0,
             ];
             $hopitaux = $service && $service->hopital ? collect([$service->hopital->loadCount('services')]) : collect();
+
+            // Infos sur le guichet du médecin
+            $guichet = \App\Models\Guichet::where('service_id', $user->service_id)->first();
+            $tickets_en_attente = $guichet ? Ticket::where('guichet_id', $guichet->id)->where('statut', 'en_attente')->count() : 0;
         } else {
             // autres rôles (réceptionnistes, etc.) affichage minimal
             $stats = [
@@ -59,8 +63,10 @@ class DashboardController extends Controller
                 'total_users'    => 0,
                 'total_tickets'  => 0,
             ];
+            $guichet = null;
+            $tickets_en_attente = 0;
         }
 
-        return view('dashboard', compact('stats', 'hopitaux'));
+        return view('dashboard', compact('stats', 'hopitaux', 'guichet', 'tickets_en_attente'));
     }
 }

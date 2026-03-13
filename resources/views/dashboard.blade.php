@@ -98,6 +98,31 @@
                             {{ $stats['total_tickets'] ?? 0 }}
                         </p>
                     </div>
+
+                    @if(auth()->user()->role === 'medecin' && $guichet)
+                    <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition col-span-full">
+                        <h3 class="text-gray-500 text-sm">Mon Guichet</h3>
+                        <p class="text-xl font-bold {{ $guichet->est_ouvert ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $guichet->nom }} - {{ $guichet->est_ouvert ? 'Ouvert' : 'Fermé' }}
+                        </p>
+                        <p class="text-sm text-gray-600">Personnes en attente: {{ $tickets_en_attente }}</p>
+                        @if($guichet->est_ouvert)
+                        <form method="POST" action="{{ route('guichets.update', $guichet) }}" class="mt-2">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="est_ouvert" value="0">
+                            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Fermer le guichet</button>
+                        </form>
+                        @else
+                        <form method="POST" action="{{ route('guichets.update', $guichet) }}" class="mt-2">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="est_ouvert" value="1">
+                            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Ouvrir le guichet</button>
+                        </form>
+                        @endif
+                    </div>
+                    @endif
                 </div>
                 <!-- gestion de utilisateur -->
                 {{-- SECTION AGENTS/UTILISATEURS --}}
