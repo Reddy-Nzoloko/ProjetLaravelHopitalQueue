@@ -15,6 +15,12 @@ class Ticket extends Model
         'guichet_id',
         'user_id',
         'numero_ticket',
+        // informations du patient (ajoutées pour la file d'attente)
+        'patient_nom',
+        'patient_telephone',
+        'patient_email',
+        'patient_age',
+        'patient_sexe',
         'priorite',
         'statut',
         'heure_arrivee',
@@ -29,6 +35,7 @@ class Ticket extends Model
         'heure_appel'   => 'datetime',
         'heure_debut'   => 'datetime',
         'heure_fin'     => 'datetime',
+        'patient_age'   => 'integer',
     ];
 
     // --- TES RELATIONS (CARDINALITÉS) ---

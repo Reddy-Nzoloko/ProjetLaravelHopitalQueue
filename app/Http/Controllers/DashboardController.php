@@ -29,6 +29,10 @@ class DashboardController extends Controller
 
             // Tous les hôpitaux
             $hopitaux = Hopital::withCount('services')->get();
+
+            // Pas de guichet spécifique pour admin_global
+            $guichet = null;
+            $tickets_en_attente = 0;
         } elseif ($user->role === 'admin_hopital') {
             // Statistiques limitées à l'hôpital de l'utilisateur
             $hopital = $user->hopital;
@@ -41,6 +45,10 @@ class DashboardController extends Controller
             ];
 
             $hopitaux = $hopital ? collect([$hopital->loadCount('services')]) : collect();
+
+            // Pas de guichet spécifique pour admin_hopital
+            $guichet = null;
+            $tickets_en_attente = 0;
         } elseif ($user->role === 'medecin') {
             // Statistiques très limitées au service du médecin
             $service = $user->service;

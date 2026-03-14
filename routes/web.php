@@ -49,5 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('tickets/borne/{hopital}', [TicketController::class, 'create'])->name('ticket.borne');
     Route::post('tickets', [TicketController::class, 'store'])->name('ticket.store');
     Route::get('tickets', [TicketController::class, 'index'])->name('ticket.index');
+    Route::post('tickets/{ticket}/call', [TicketController::class, 'call'])->name('ticket.call');
+    Route::post('tickets/next', [TicketController::class, 'next'])->name('ticket.next');
 
 });

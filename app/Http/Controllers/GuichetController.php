@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Guichet;
 use App\Models\Hopital;
 use App\Models\Service;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -129,6 +130,13 @@ class GuichetController extends Controller
         ]);
 
         $guichet->update(['est_ouvert' => $request->est_ouvert]);
+
+        // Si le guichet est fermé, les tickets en attente sont annulés
+        if (! $request->est_ouvert) {
+            Ticket::where('guichet_id', $guichet->id)
+                ->where('statut', 'en_attente')
+                ->update(['statut' => 'absent']);
+        }
 
         return redirect()->back()->with('success', 'Statut du guichet mis à jour !');
     }
