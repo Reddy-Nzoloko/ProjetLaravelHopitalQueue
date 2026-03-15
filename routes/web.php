@@ -3,10 +3,22 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GuichetController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\PatientDashboardController;
+use App\Http\Controllers\Auth\PatientAuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
+// Page d'accueil avec connexion / inscription patient intégrée
+Route::get('/', [PatientAuthController::class, 'showForm'])->name('home');
+
+// Routes d'authentification des patients
+Route::middleware('guest:patient')->group(function () {
+    Route::post('patient/register', [PatientAuthController::class, 'register'])->name('patient.register');
+    Route::post('patient/login', [PatientAuthController::class, 'login'])->name('patient.login');
+});
+
+Route::middleware('auth:patient')->group(function () {
+    Route::get('patient/dashboard', [PatientDashboardController::class, 'index'])->name('patient.dashboard');
+    Route::post('patient/logout', [PatientAuthController::class, 'logout'])->name('patient.logout');
 });
 
 // Route::get('/dashboard', function () {
