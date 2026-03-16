@@ -13,6 +13,7 @@ class Patient extends Authenticatable
 
     protected $fillable = [
         'name',
+        'date_naissance',
         'email',
         'phone',
         'password',
@@ -28,6 +29,7 @@ class Patient extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'date_naissance' => 'date',
     ];
 
     public function hopital()

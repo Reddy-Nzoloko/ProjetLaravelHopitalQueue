@@ -39,7 +39,9 @@ class PatientAuthController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'date_naissance' => ['required', 'date', 'before:today'],
             'email' => ['required', 'email', 'max:255', 'unique:patients,email'],
+            'phone' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'confirmed', 'min:8'],
             'hopital_id' => ['required', 'exists:hopitaux,id'],
             'service_id' => ['required', 'exists:services,id'],
@@ -48,7 +50,9 @@ class PatientAuthController extends Controller
 
         $patient = Patient::create([
             'name' => $request->name,
+            'date_naissance' => $request->date_naissance,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'hopital_id' => $request->hopital_id,
             'service_id' => $request->service_id,
