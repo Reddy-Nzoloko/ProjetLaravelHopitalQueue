@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database. Création de l'administrateur 
+     * Seed the application's database. Création de l'espace patient
      */
 public function run(): void
 {
